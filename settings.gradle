@@ -1,1 +1,1 @@
-include ':app'
+include ':paginated-list', ':paginated-list', ':paginated-list'
