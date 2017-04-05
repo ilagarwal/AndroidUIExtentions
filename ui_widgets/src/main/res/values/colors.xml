@@ -2,4 +2,5 @@
 <resources>
     <color name="ae_black">#000000</color>
     <color name="ae_white">#FFFFFF</color>
+    <color name="ae_yellow">#ffa91b</color>
 </resources>

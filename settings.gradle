@@ -1,1 +1,1 @@
-include ':paginated-list', ':paginated-list', ':paginated-list'
+include ':ui_widgets', ':paginated-list', ':paginated-list'

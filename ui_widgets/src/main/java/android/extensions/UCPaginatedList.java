@@ -13,7 +13,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
-import com.androiduiextentions.R;
+import com.urbanclap.android.extension.R;
 
 import java.util.ArrayList;
 
@@ -106,7 +106,9 @@ public class  UCPaginatedList extends RelativeLayout {
             mData.clear();
         }
 
-        mData.addAll(mDatasourceDelegate.parseDataArray(data));
+        if (mDatasourceDelegate != null) {
+            mData.addAll(mDatasourceDelegate.parseDataArray(data));
+        }
 
         mPageNumber = mPageNumber + 1;
 
@@ -174,7 +176,7 @@ public class  UCPaginatedList extends RelativeLayout {
     }
 
     public void initEmptyView() {
-        mEmptyViewTextView.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+        mEmptyViewTextView.setTextColor(getResources().getColor(R.color.ae_black));
         mEmptyViewTextView.setText(mEmptyStateText);
         mEmptyView.setVisibility(View.GONE);
         mEmptyView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -186,15 +188,17 @@ public class  UCPaginatedList extends RelativeLayout {
     }
 
     private void fetchData(int page) {
-        if (mDataFetchInProgress || mNoMoreData) {
+        if (mDataFetchInProgress) {
             return;
         }
 
         mDataFetchInProgress = true;
 
-        mDatasourceDelegate.fetchNextPage(page);
-        if (!mSwipeRefreshLayout.isRefreshing() && !mEmptyView.isRefreshing()) {
-            mProgressBar.setVisibility(View.VISIBLE);
+        if (mDatasourceDelegate != null) {
+            mDatasourceDelegate.fetchNextPage(page);
+            if (!mSwipeRefreshLayout.isRefreshing() && !mEmptyView.isRefreshing()) {
+                mProgressBar.setVisibility(View.VISIBLE);
+            }
         }
     }
 }

@@ -173,7 +173,7 @@ public class  UCPaginatedList extends RelativeLayout {
     }
 
     public void initEmptyView() {
-        mEmptyViewTextView.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+        mEmptyViewTextView.setTextColor(ContextCompat.getColor(mContext, R.color.ae_black));
         mEmptyViewTextView.setText(mEmptyStateText);
         mEmptyView.setVisibility(View.GONE);
         mEmptyView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
