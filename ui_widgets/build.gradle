@@ -13,7 +13,7 @@ ext {
     siteUrl = 'https://github.com/ilagarwal/AndroidUIExtentions'
     gitUrl = 'https://github.com/ilagarwal/AndroidUIExtentions.git'
 
-    libraryVersion = '0.0.3'
+    libraryVersion = '0.0.6'
 
     developerId = 'urbanclap'
     developerName = 'UrbanClap'

@@ -12,7 +12,6 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-
 import com.urbanclap.android.extension.R;
 
 import java.util.ArrayList;
@@ -41,7 +40,6 @@ public class  UCPaginatedList extends RelativeLayout {
     //Pagination
     private int mItemsOffsetBeforeNextPage = 1;
     private int mPageNumber = 0;
-    private boolean mNoMoreData;
 
     // Adapter
     private UCPaginatedAdapter mAdapter;
@@ -91,26 +89,26 @@ public class  UCPaginatedList extends RelativeLayout {
 
     public void recievedDataSuccess(ArrayList<Object> data, int page) {
         mEmptyView.setVisibility(View.GONE);
+
         if (mData == null) {
             mData = new ArrayList<>();
-        }
-        mDataFetchInProgress = false;
-        if (data == null || data.size() < PAGINATION_COUNT) {
-            if (page == 0 && (data == null || data.size() == 0)) {
-                mEmptyView.setVisibility(View.VISIBLE);
-            }
-            mNoMoreData = true;
         }
 
         if (page == 0) {
             mData.clear();
         }
 
-        if (mDatasourceDelegate != null) {
-            mData.addAll(mDatasourceDelegate.parseDataArray(data));
+        if (page == 0 && (data == null || data.size() == 0)) {
+            mEmptyView.setVisibility(View.VISIBLE);
         }
-
-        mPageNumber = mPageNumber + 1;
+        else {
+            if (mDatasourceDelegate != null) {
+                mData.addAll(mDatasourceDelegate.parseDataArray(data));
+            }
+            if (data != null && data.size() > 0) {
+                mPageNumber = page + 1;
+            }
+        }
 
         if (mAdapter == null) {
             mAdapter = new UCPaginatedAdapter(mData, mAdapterDelegate);
@@ -123,6 +121,8 @@ public class  UCPaginatedList extends RelativeLayout {
         mProgressBar.setVisibility(View.GONE);
         mSwipeRefreshLayout.setRefreshing(false);
         mEmptyView.setRefreshing(false);
+
+        mDataFetchInProgress = false;
     }
 
     public void receivedDataError() {
