@@ -32,7 +32,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:background="@color/ae_white"
+        android:background="#00000000"
         android:indeterminate="true"
         android:indeterminateTint="@color/ae_yellow"
         android:visibility="gone" />
