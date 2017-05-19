@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.urbanclap.android.extension.R;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * Extends RecyclerView list to support -
@@ -132,6 +133,16 @@ public class  UCPaginatedList extends RelativeLayout {
         mEmptyView.setRefreshing(false);
     }
 
+    public boolean removeItem(Object genericItem){
+        if (mData != null && mData.contains(genericItem)) {
+            mData.remove(genericItem);
+            mAdapter.notifyDataSetChanged();
+            resetEmptyViewPageNumberState();
+            return true;
+        }
+        return false;
+    }
+
     private void inflateUI() {
         setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT));
@@ -149,7 +160,7 @@ public class  UCPaginatedList extends RelativeLayout {
         mEmptyViewTextView = (TextView) mEmptyView.findViewById(R.id.no_data_message);
     }
 
-    public void initSwipeRefresh() {
+    private void initSwipeRefresh() {
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -159,7 +170,7 @@ public class  UCPaginatedList extends RelativeLayout {
         mSwipeRefreshLayout.setVisibility(View.GONE);
     }
 
-    public void initRecycler() {
+    private void initRecycler() {
         mLinearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL,
                 false);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
@@ -175,7 +186,7 @@ public class  UCPaginatedList extends RelativeLayout {
         });
     }
 
-    public void initEmptyView() {
+    private void initEmptyView() {
         mEmptyViewTextView.setTextColor(getResources().getColor(R.color.ae_black));
         mEmptyViewTextView.setText(mEmptyStateText);
         mEmptyView.setVisibility(View.GONE);
@@ -199,6 +210,17 @@ public class  UCPaginatedList extends RelativeLayout {
             if (!mSwipeRefreshLayout.isRefreshing() && !mEmptyView.isRefreshing()) {
                 mProgressBar.setVisibility(View.VISIBLE);
             }
+        }
+    }
+
+    private void resetEmptyViewPageNumberState() {
+        if (mData != null && mData.size() == 0) {
+            mPageNumber = 0;
+            mEmptyView.setVisibility(View.VISIBLE);
+        }
+
+        if (mData != null && mData.size() != 0){
+            mEmptyView.setVisibility(View.GONE);
         }
     }
 }
