@@ -1,6 +1,7 @@
 package android.extensions;
 
 import android.content.Context;
+import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -143,6 +144,16 @@ public class  UCPaginatedList extends RelativeLayout {
         return false;
     }
 
+    public @Nullable RecyclerView getRecyclerViewOnlySpecialNeeds(){
+        return mRecyclerView;
+    }
+
+    public void refreshList(){
+       if (mAdapter != null){
+           mAdapter.notifyDataSetChanged();
+       }
+    }
+
     private void inflateUI() {
         setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT));
@@ -223,4 +234,6 @@ public class  UCPaginatedList extends RelativeLayout {
             mEmptyView.setVisibility(View.GONE);
         }
     }
+
+
 }
