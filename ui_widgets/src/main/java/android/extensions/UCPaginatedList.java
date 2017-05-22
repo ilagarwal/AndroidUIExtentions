@@ -1,6 +1,7 @@
 package android.extensions;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -152,6 +153,13 @@ public class  UCPaginatedList extends RelativeLayout {
        if (mAdapter != null){
            mAdapter.notifyDataSetChanged();
        }
+    }
+
+    public int getItemPosition(@NonNull Object genericObject){
+        if (mData != null){
+            return mData.indexOf(genericObject);
+        }
+        return RecyclerView.NO_POSITION;
     }
 
     private void inflateUI() {
