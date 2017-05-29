@@ -72,7 +72,9 @@ public class  UCPaginatedList extends RelativeLayout {
 
     public UCPaginatedList addDataSourceDelegate(IUCPaginatedDatasource dataSourceDelegate) {
         mDatasourceDelegate = dataSourceDelegate;
-        mComparisonDelegate = dataSourceDelegate;
+        if (dataSourceDelegate instanceof IUCDatasourceComparison) {
+            mComparisonDelegate = (IUCDatasourceComparison) dataSourceDelegate;
+        }
         return this;
     }
 
