@@ -46,8 +46,11 @@ public class  UCPaginatedList extends RelativeLayout {
 
     // Adapter
     private UCPaginatedAdapter mAdapter;
+
+    // Delegates
     private IUCPaginatedAdapter mAdapterDelegate;
     private IUCPaginatedDatasource mDatasourceDelegate;
+    private IUCDatasourceComparison mComparisonDelegate;
 
     //API
     private boolean mDataFetchInProgress;
@@ -69,6 +72,7 @@ public class  UCPaginatedList extends RelativeLayout {
 
     public UCPaginatedList addDataSourceDelegate(IUCPaginatedDatasource dataSourceDelegate) {
         mDatasourceDelegate = dataSourceDelegate;
+        mComparisonDelegate = dataSourceDelegate;
         return this;
     }
 
@@ -162,6 +166,31 @@ public class  UCPaginatedList extends RelativeLayout {
         return RecyclerView.NO_POSITION;
     }
 
+    public boolean removeItemByReferenceId (String referenceId){
+        Object found = findItemByReferenceId(referenceId);
+        if ( found != null){
+            removeItem(found);
+            return true;
+        }
+        return false;
+    }
+
+    private Object findItemByReferenceId (String referenceId){
+        if (mData == null || mData.size() == 0)
+            return null;
+
+        for ( Object o : mData)
+        if (mComparisonDelegate != null){
+            if (mComparisonDelegate.hasReferenceId(o,referenceId)){
+                return o;
+            }
+        }
+
+        return null;
+    }
+
+
+
     private void inflateUI() {
         setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT));
@@ -242,6 +271,4 @@ public class  UCPaginatedList extends RelativeLayout {
             mEmptyView.setVisibility(View.GONE);
         }
     }
-
-
 }
