@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,7 +18,6 @@ import android.widget.TextView;
 import com.urbanclap.android.extension.R;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 /**
  * Extends RecyclerView list to support -
@@ -199,7 +197,27 @@ public class  UCPaginatedList extends RelativeLayout {
         return null;
     }
 
+    public boolean updateItemByReferenceId(String referenceId, Object newItem) {
+        Object found = findItemByReferenceId(referenceId);
+        if (found != null) {
+            updateItem(found, newItem);
+            return true;
+        }
+        return false;
+    }
 
+    public boolean updateItem(Object oldItem, Object newItem) {
+        if (mData != null) {
+            int position = mData.indexOf(oldItem);
+            if (position == -1) {
+                return false;
+            }
+            mData.set(position, newItem);
+            mAdapter.notifyItemChanged(position);
+            return true;
+        }
+        return false;
+    }
 
     private void inflateUI() {
         setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
