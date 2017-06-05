@@ -27,7 +27,7 @@ import java.util.ArrayList;
  * 4. Empty view in case of no data
  */
 
-public class  UCPaginatedList extends RelativeLayout {
+public class UCPaginatedList extends RelativeLayout {
 
     private static final int PAGINATION_COUNT = 10;
 
@@ -115,8 +115,7 @@ public class  UCPaginatedList extends RelativeLayout {
 
         if (page == 0 && (data == null || data.size() == 0)) {
             mEmptyView.setVisibility(View.VISIBLE);
-        }
-        else {
+        } else {
             if (mDatasourceDelegate != null) {
                 mData.addAll(mDatasourceDelegate.parseDataArray(data));
             }
@@ -147,7 +146,7 @@ public class  UCPaginatedList extends RelativeLayout {
         mEmptyView.setRefreshing(false);
     }
 
-    public boolean removeItem(Object genericItem){
+    public boolean removeItem(Object genericItem) {
         if (mData != null && mData.contains(genericItem)) {
             mData.remove(genericItem);
             mAdapter.notifyDataSetChanged();
@@ -157,42 +156,44 @@ public class  UCPaginatedList extends RelativeLayout {
         return false;
     }
 
-    public @Nullable RecyclerView getRecyclerViewOnlySpecialNeeds(){
+    public
+    @Nullable
+    RecyclerView getRecyclerViewOnlySpecialNeeds() {
         return mRecyclerView;
     }
 
-    public void refreshList(){
-       if (mAdapter != null){
-           mAdapter.notifyDataSetChanged();
-       }
+    public void refreshList() {
+        if (mAdapter != null) {
+            mAdapter.notifyDataSetChanged();
+        }
     }
 
-    public int getItemPosition(@NonNull Object genericObject){
-        if (mData != null){
+    public int getItemPosition(@NonNull Object genericObject) {
+        if (mData != null) {
             return mData.indexOf(genericObject);
         }
         return RecyclerView.NO_POSITION;
     }
 
-    public boolean removeItemByReferenceId (String referenceId){
+    public boolean removeItemByReferenceId(String referenceId) {
         Object found = findItemByReferenceId(referenceId);
-        if ( found != null){
+        if (found != null) {
             removeItem(found);
             return true;
         }
         return false;
     }
 
-    private Object findItemByReferenceId (String referenceId){
+    private Object findItemByReferenceId(String referenceId) {
         if (mData == null || mData.size() == 0)
             return null;
 
-        for ( Object o : mData)
-        if (mComparisonDelegate != null){
-            if (mComparisonDelegate.hasReferenceId(o,referenceId)){
-                return o;
+        for (Object o : mData)
+            if (mComparisonDelegate != null) {
+                if (mComparisonDelegate.hasReferenceId(o, referenceId)) {
+                    return o;
+                }
             }
-        }
 
         return null;
     }
@@ -214,6 +215,7 @@ public class  UCPaginatedList extends RelativeLayout {
             }
             mData.set(position, newItem);
             mAdapter.notifyItemChanged(position);
+            resetEmptyViewPageNumberState();
             return true;
         }
         return false;
@@ -295,8 +297,23 @@ public class  UCPaginatedList extends RelativeLayout {
             mEmptyView.setVisibility(View.VISIBLE);
         }
 
-        if (mData != null && mData.size() != 0){
+        if (mData != null && mData.size() != 0) {
             mEmptyView.setVisibility(View.GONE);
         }
     }
+
+    public boolean overrideDataSource(ArrayList<Object> data) {
+        if (mAdapter != null) {
+            if (mData != null) {
+                mData.clear();
+                mData.addAll(data);
+            } else {
+                mData = data;
+            }
+            mAdapter.notifyDataSetChanged();
+            return true;
+        }
+        return false;
+    }
+
 }
