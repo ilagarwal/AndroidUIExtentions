@@ -302,7 +302,7 @@ public class UCPaginatedList extends RelativeLayout {
         }
     }
 
-    public boolean overrideDataSource(ArrayList<Object> data) {
+    public boolean overrideDataSource(ArrayList<Object> data, int skipToPage) {
         if (mAdapter != null) {
             if (mData != null) {
                 mData.clear();
@@ -312,6 +312,9 @@ public class UCPaginatedList extends RelativeLayout {
             }
             mAdapter.notifyDataSetChanged();
             return true;
+        }
+        if (skipToPage > 0){
+            mPageNumber = skipToPage;
         }
         return false;
     }
