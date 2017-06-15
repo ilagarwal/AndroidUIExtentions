@@ -184,7 +184,7 @@ public class UCPaginatedList extends RelativeLayout {
         return false;
     }
 
-    private Object findItemByReferenceId(String referenceId) {
+    public Object findItemByReferenceId(String referenceId) {
         if (mData == null || mData.size() == 0)
             return null;
 
