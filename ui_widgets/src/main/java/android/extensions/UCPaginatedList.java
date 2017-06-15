@@ -162,9 +162,14 @@ public class UCPaginatedList extends RelativeLayout {
         return mRecyclerView;
     }
 
-    public void refreshList() {
-        if (mAdapter != null) {
-            mAdapter.notifyDataSetChanged();
+    public void refreshList(boolean fromPageZero) {
+        if (fromPageZero){
+            fetchData(0);
+        }
+        else {
+            if (mAdapter != null) {
+                mAdapter.notifyDataSetChanged();
+            }
         }
     }
 
