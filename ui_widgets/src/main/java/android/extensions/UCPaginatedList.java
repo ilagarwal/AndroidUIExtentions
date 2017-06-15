@@ -256,9 +256,19 @@ public class UCPaginatedList extends RelativeLayout {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                if (mLinearLayoutManager.findLastCompletelyVisibleItemPosition()
-                        + mItemsOffsetBeforeNextPage > recyclerView.getAdapter().getItemCount()) {
-                    fetchData(mPageNumber);
+                if (mDataFetchInProgress){
+                    return;
+                }
+                if(dy > 0)
+                {
+                    int visibleItemCount = mLinearLayoutManager.getChildCount();
+                    int totalItemCount = mLinearLayoutManager.getItemCount();
+                    int pastVisibleItems = mLinearLayoutManager.findFirstVisibleItemPosition();
+                    if ((visibleItemCount + pastVisibleItems) + mItemsOffsetBeforeNextPage
+                            >= totalItemCount) {
+
+                        fetchData(mPageNumber);
+                    }
                 }
             }
         });
