@@ -59,6 +59,7 @@ public class UCPaginatedList extends RelativeLayout {
 
     // Context
     private Context mContext;
+    private boolean initialized = false;
 
     public UCPaginatedList(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -99,7 +100,13 @@ public class UCPaginatedList extends RelativeLayout {
         initRecycler();
         initSwipeRefresh();
         mProgressBar.setVisibility(View.VISIBLE);
-        fetchData(0);
+        initialized = true;
+    }
+
+    public void startDataPopulation(){
+        if (initialized) {
+            fetchData(0);
+        }
     }
 
     public void recievedDataSuccess(ArrayList<Object> data, int page) {
