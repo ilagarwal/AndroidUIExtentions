@@ -131,19 +131,20 @@ public class UCPaginatedList extends RelativeLayout {
             }
         }
 
+        refreshAdapater();
+
+        refreshLoaderState();
+
+        mDataFetchInProgress = false;
+    }
+
+    private void refreshAdapater() {
         if (mAdapter == null) {
             mAdapter = new UCPaginatedAdapter(mData, mAdapterDelegate);
             mRecyclerView.setAdapter(mAdapter);
         } else {
             mAdapter.notifyDataSetChanged();
         }
-
-        mSwipeRefreshLayout.setVisibility(View.VISIBLE); // why this ?
-        mProgressBar.setVisibility(View.GONE);
-        mSwipeRefreshLayout.setRefreshing(false);
-        mEmptyView.setRefreshing(false);
-
-        mDataFetchInProgress = false;
     }
 
     public void receivedDataError() {
@@ -321,24 +322,34 @@ public class UCPaginatedList extends RelativeLayout {
 
         if (mData != null && mData.size() != 0) {
             mEmptyView.setVisibility(View.GONE);
+
         }
     }
 
-    public boolean overrideDataSource(ArrayList<Object> data, int skipToPage) {
-        if (mAdapter != null) {
-            if (mData != null) {
-                mData.clear();
-                mData.addAll(data);
-            } else {
-                mData = data;
-            }
-            mAdapter.notifyDataSetChanged();
-            return true;
+    public void overrideDataSource(ArrayList<Object> data, int skipToPage) {
+        if (data == null || data.size() == 0){
+            return;
         }
+        if (mData != null) {
+            mData.clear();
+            mData.addAll(data);
+        } else {
+            mData = new ArrayList<>();
+            mData.addAll(data);
+        }
+        refreshAdapater();
+
         if (skipToPage > 0){
             mPageNumber = skipToPage;
         }
-        return false;
+        refreshLoaderState();
+    }
+
+    private void refreshLoaderState() {
+        mSwipeRefreshLayout.setVisibility(View.VISIBLE); // why this ?
+        mProgressBar.setVisibility(View.GONE);
+        mSwipeRefreshLayout.setRefreshing(false);
+        mEmptyView.setRefreshing(false);
     }
 
 }
