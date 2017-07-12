@@ -1,6 +1,7 @@
 package android.extensions;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -30,6 +31,7 @@ import java.util.ArrayList;
 public class UCPaginatedList extends RelativeLayout {
 
     private static final int PAGINATION_COUNT = 10;
+    private static final int TOP_PADDING = 8;
 
     //UI
     private RecyclerView mRecyclerView;
@@ -40,6 +42,7 @@ public class UCPaginatedList extends RelativeLayout {
     private TextView mEmptyViewTextView;
     private LinearLayoutManager mLinearLayoutManager;
     private int mEmptyTextColor = Color.BLACK;
+    private boolean showTopPadding;
 
     //Pagination
     private int mItemsOffsetBeforeNextPage = 1;
@@ -57,14 +60,41 @@ public class UCPaginatedList extends RelativeLayout {
     private boolean mDataFetchInProgress;
     private ArrayList<Object> mData;
 
-    // Context
-    private Context mContext;
     private boolean initialized = false;
+
+    public UCPaginatedList(Context context) {
+        super(context);
+        init(null);
+    }
 
     public UCPaginatedList(Context context, AttributeSet attrs) {
         super(context, attrs);
-        mContext = context;
+        init(attrs);
+    }
+
+    public UCPaginatedList(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        init(attrs);
+    }
+
+    private void init(AttributeSet attrs) {
         inflateUI();
+        parseAttributeSet(attrs);
+        populateUI();
+    }
+
+    private void parseAttributeSet(AttributeSet attrs) {
+        TypedArray ta = getContext().obtainStyledAttributes(attrs, R.styleable.UCPaginatedList);
+        showTopPadding = ta.getBoolean(R.styleable.UCPaginatedList_showTopPadding, false);
+        ta.recycle();
+    }
+
+    private void populateUI() {
+        if (showTopPadding) {
+            mRecyclerView.setPadding(0, Utils.dpToPx(getContext(), TOP_PADDING), 0, 0);
+            mRecyclerView.setClipToPadding(false);
+            mRecyclerView.setClipChildren(false);
+        }
     }
 
     public UCPaginatedList addAdapterDelegate(IUCPaginatedAdapter adapterDelegate) {
@@ -239,7 +269,7 @@ public class UCPaginatedList extends RelativeLayout {
                 ViewGroup.LayoutParams.MATCH_PARENT));
 
         LayoutInflater inflater = (LayoutInflater)
-                mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         View view = inflater.inflate(
                 R.layout.paginated_recycler, this, true);
