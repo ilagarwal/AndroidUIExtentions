@@ -379,6 +379,7 @@ public class UCPaginatedList extends RelativeLayout {
         mSwipeRefreshLayout.setVisibility(View.VISIBLE); // why this ?
         mProgressBar.setVisibility(View.GONE);
         mSwipeRefreshLayout.setRefreshing(false);
+        mSwipeRefreshLayout.setVisibility(View.VISIBLE);
         mEmptyView.setRefreshing(false);
     }
 
