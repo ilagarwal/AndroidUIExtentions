@@ -133,13 +133,13 @@ public class UCPaginatedList extends RelativeLayout {
         initialized = true;
     }
 
-    public void startDataPopulation(){
+    public void startDataPopulation() {
         if (initialized) {
             fetchData(0);
         }
     }
 
-    public void recievedDataSuccess(ArrayList<Object> data, int page) {
+    public void recievedDataSuccess(ArrayList<Object> data, int page, boolean autoIncrementPage) {
         mEmptyView.setVisibility(View.GONE);
 
         if (mData == null) {
@@ -156,8 +156,13 @@ public class UCPaginatedList extends RelativeLayout {
             if (mDatasourceDelegate != null) {
                 mData.addAll(mDatasourceDelegate.parseDataArray(data));
             }
-            if (data != null && data.size() > 0) {
-                mPageNumber = page + 1;
+
+            if (!autoIncrementPage) {
+                mPageNumber = page;
+            } else {
+                if (data != null && data.size() > 0) {
+                    mPageNumber = page + 1;
+                }
             }
         }
 
@@ -201,10 +206,9 @@ public class UCPaginatedList extends RelativeLayout {
     }
 
     public void refreshList(boolean fromPageZero) {
-        if (fromPageZero){
+        if (fromPageZero) {
             fetchData(0);
-        }
-        else {
+        } else {
             if (mAdapter != null) {
                 mAdapter.notifyDataSetChanged();
             }
@@ -299,11 +303,10 @@ public class UCPaginatedList extends RelativeLayout {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                if (mDataFetchInProgress){
+                if (mDataFetchInProgress) {
                     return;
                 }
-                if(dy > 0)
-                {
+                if (dy > 0) {
                     int visibleItemCount = mLinearLayoutManager.getChildCount();
                     int totalItemCount = mLinearLayoutManager.getItemCount();
                     int pastVisibleItems = mLinearLayoutManager.findFirstVisibleItemPosition();
@@ -357,7 +360,7 @@ public class UCPaginatedList extends RelativeLayout {
     }
 
     public void overrideDataSource(ArrayList<Object> data, int skipToPage) {
-        if (data == null || data.size() == 0){
+        if (data == null || data.size() == 0) {
             return;
         }
         if (mData != null) {
@@ -369,7 +372,7 @@ public class UCPaginatedList extends RelativeLayout {
         }
         refreshAdapater();
 
-        if (skipToPage > 0){
+        if (skipToPage > 0) {
             mPageNumber = skipToPage;
         }
         refreshLoaderState();
