@@ -47,6 +47,7 @@ public class UCPaginatedList extends RelativeLayout {
     //Pagination
     private int mItemsOffsetBeforeNextPage = 1;
     private int mPageNumber = 0;
+    boolean mAutoIncrementPage = true;
 
     // Adapter
     private UCPaginatedAdapter mAdapter;
@@ -125,6 +126,11 @@ public class UCPaginatedList extends RelativeLayout {
         return this;
     }
 
+    public UCPaginatedList setAutoIncrement(boolean autoIncrement) {
+        mAutoIncrementPage = autoIncrement;
+        return this;
+    }
+
     public void initialize() {
         initEmptyView();
         initRecycler();
@@ -139,7 +145,7 @@ public class UCPaginatedList extends RelativeLayout {
         }
     }
 
-    public void recievedDataSuccess(ArrayList<Object> data, int page, boolean autoIncrementPage) {
+    public void recievedDataSuccess(ArrayList<Object> data, int page) {
         mEmptyView.setVisibility(View.GONE);
 
         if (mData == null) {
@@ -157,7 +163,7 @@ public class UCPaginatedList extends RelativeLayout {
                 mData.addAll(mDatasourceDelegate.parseDataArray(data));
             }
 
-            if (!autoIncrementPage) {
+            if (!mAutoIncrementPage) {
                 mPageNumber = page;
             } else {
                 if (data != null && data.size() > 0) {
