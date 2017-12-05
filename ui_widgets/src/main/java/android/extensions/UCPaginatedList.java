@@ -47,6 +47,7 @@ public class UCPaginatedList extends RelativeLayout {
     //Pagination
     private int mItemsOffsetBeforeNextPage = 1;
     private int mPageNumber = 0;
+    boolean mAutoIncrementPage = true;
 
     // Adapter
     private UCPaginatedAdapter mAdapter;
@@ -125,6 +126,11 @@ public class UCPaginatedList extends RelativeLayout {
         return this;
     }
 
+    public UCPaginatedList setAutoIncrement(boolean autoIncrement) {
+        mAutoIncrementPage = autoIncrement;
+        return this;
+    }
+
     public void initialize() {
         initEmptyView();
         initRecycler();
@@ -133,7 +139,7 @@ public class UCPaginatedList extends RelativeLayout {
         initialized = true;
     }
 
-    public void startDataPopulation(){
+    public void startDataPopulation() {
         if (initialized) {
             fetchData(0);
         }
@@ -156,8 +162,13 @@ public class UCPaginatedList extends RelativeLayout {
             if (mDatasourceDelegate != null) {
                 mData.addAll(mDatasourceDelegate.parseDataArray(data));
             }
-            if (data != null && data.size() > 0) {
-                mPageNumber = page + 1;
+
+            if (!mAutoIncrementPage) {
+                mPageNumber = page;
+            } else {
+                if (data != null && data.size() > 0) {
+                    mPageNumber = page + 1;
+                }
             }
         }
 
@@ -201,10 +212,9 @@ public class UCPaginatedList extends RelativeLayout {
     }
 
     public void refreshList(boolean fromPageZero) {
-        if (fromPageZero){
+        if (fromPageZero) {
             fetchData(0);
-        }
-        else {
+        } else {
             if (mAdapter != null) {
                 mAdapter.notifyDataSetChanged();
             }
@@ -299,11 +309,10 @@ public class UCPaginatedList extends RelativeLayout {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                if (mDataFetchInProgress){
+                if (mDataFetchInProgress) {
                     return;
                 }
-                if(dy > 0)
-                {
+                if (dy > 0) {
                     int visibleItemCount = mLinearLayoutManager.getChildCount();
                     int totalItemCount = mLinearLayoutManager.getItemCount();
                     int pastVisibleItems = mLinearLayoutManager.findFirstVisibleItemPosition();
@@ -357,7 +366,7 @@ public class UCPaginatedList extends RelativeLayout {
     }
 
     public void overrideDataSource(ArrayList<Object> data, int skipToPage) {
-        if (data == null || data.size() == 0){
+        if (data == null || data.size() == 0) {
             return;
         }
         if (mData != null) {
@@ -369,7 +378,7 @@ public class UCPaginatedList extends RelativeLayout {
         }
         refreshAdapater();
 
-        if (skipToPage > 0){
+        if (skipToPage > 0) {
             mPageNumber = skipToPage;
         }
         refreshLoaderState();
