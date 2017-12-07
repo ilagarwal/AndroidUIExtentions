@@ -30,6 +30,8 @@ import java.util.ArrayList;
 
 public class UCPaginatedList extends RelativeLayout {
 
+    public static final int NO_NEXT_PAGE = -1;
+
     private static final int PAGINATION_COUNT = 10;
     private static final int TOP_PADDING = 8;
 
@@ -47,7 +49,6 @@ public class UCPaginatedList extends RelativeLayout {
     //Pagination
     private int mItemsOffsetBeforeNextPage = 1;
     private int mPageNumber = 0;
-    boolean mAutoIncrementPage = true;
 
     // Adapter
     private UCPaginatedAdapter mAdapter;
@@ -126,11 +127,6 @@ public class UCPaginatedList extends RelativeLayout {
         return this;
     }
 
-    public UCPaginatedList setAutoIncrement(boolean autoIncrement) {
-        mAutoIncrementPage = autoIncrement;
-        return this;
-    }
-
     public void initialize() {
         initEmptyView();
         initRecycler();
@@ -145,29 +141,29 @@ public class UCPaginatedList extends RelativeLayout {
         }
     }
 
-    public void recievedDataSuccess(ArrayList<Object> data, int page) {
+    public void recievedDataSuccess(ArrayList<Object> data, int currentPage, int nextPage) {
         mEmptyView.setVisibility(View.GONE);
 
         if (mData == null) {
             mData = new ArrayList<>();
         }
 
-        if (page == 0) {
+        if (currentPage == 0) {
             mData.clear();
         }
 
-        if (page == 0 && (data == null || data.size() == 0)) {
+        if (currentPage == 0 && (data == null || data.size() == 0)) {
             mEmptyView.setVisibility(View.VISIBLE);
         } else {
             if (mDatasourceDelegate != null) {
                 mData.addAll(mDatasourceDelegate.parseDataArray(data));
             }
 
-            if (!mAutoIncrementPage) {
-                mPageNumber = page;
+            if (nextPage != NO_NEXT_PAGE) {
+                mPageNumber = nextPage;
             } else {
                 if (data != null && data.size() > 0) {
-                    mPageNumber = page + 1;
+                    mPageNumber = currentPage + 1;
                 }
             }
         }
