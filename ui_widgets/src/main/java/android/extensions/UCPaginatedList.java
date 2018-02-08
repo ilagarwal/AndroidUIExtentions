@@ -298,6 +298,7 @@ public class UCPaginatedList extends RelativeLayout {
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                mNoMoreData = false;
                 fetchData(0);
             }
         });
@@ -336,6 +337,7 @@ public class UCPaginatedList extends RelativeLayout {
         mEmptyView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                mNoMoreData = false;
                 fetchData(0);
             }
         });
