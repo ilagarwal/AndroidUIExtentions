@@ -60,6 +60,7 @@ public class UCPaginatedList extends RelativeLayout {
 
     //API
     private boolean mDataFetchInProgress;
+    private boolean mNoMoreData;
     private ArrayList<Object> mData;
 
     private boolean initialized = false;
@@ -139,6 +140,12 @@ public class UCPaginatedList extends RelativeLayout {
         if (initialized) {
             fetchData(0);
         }
+    }
+
+
+    public void recievedDataSuccess(ArrayList<Object> data, int currentPage, int nextPage, boolean noMoreData) {
+        this.mNoMoreData = noMoreData;
+        recievedDataSuccess(data, currentPage, nextPage);
     }
 
     public void recievedDataSuccess(ArrayList<Object> data, int currentPage, int nextPage) {
@@ -335,7 +342,7 @@ public class UCPaginatedList extends RelativeLayout {
     }
 
     private void fetchData(int page) {
-        if (mDataFetchInProgress) {
+        if (mDataFetchInProgress || mNoMoreData) {
             return;
         }
 
