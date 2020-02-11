@@ -1,2 +1,2 @@
 # AndroidUIExtentions
-Extending Android UI Elements to abstract repetitive functionality
+Extending Android UI Elements to abstract repeatitive functionality
