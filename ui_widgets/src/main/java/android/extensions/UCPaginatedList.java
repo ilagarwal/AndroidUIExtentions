@@ -217,6 +217,7 @@ public class UCPaginatedList extends RelativeLayout {
 
     public void refreshList(boolean fromPageZero) {
         if (fromPageZero) {
+            mNoMoreData = false;
             fetchData(0);
         } else {
             if (mAdapter != null) {
