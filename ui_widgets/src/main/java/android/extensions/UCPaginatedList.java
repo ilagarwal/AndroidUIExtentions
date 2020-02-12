@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.urbanclap.android.extension.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Extends RecyclerView list to support -
@@ -356,6 +357,26 @@ public class UCPaginatedList extends RelativeLayout {
                 mProgressBar.setVisibility(View.VISIBLE);
             }
         }
+    }
+
+    public void insertItemAtPosition(Object item, int position) {
+        if (mData == null) {
+            mData = new ArrayList<>();
+        }
+        if (position > mData.size())
+            return;
+        mData.add(position, item);
+        mAdapter.notifyItemInserted(position);
+    }
+
+    public void insertItemRangeAtPosition(List<Object> items, int position) {
+        if (mData == null) {
+            mData = new ArrayList<>();
+        }
+        if (position > mData.size() || items == null)
+            return;
+        mData.addAll(position, items);
+        mAdapter.notifyItemRangeInserted(position,items.size());
     }
 
     private void resetEmptyViewPageNumberState() {
