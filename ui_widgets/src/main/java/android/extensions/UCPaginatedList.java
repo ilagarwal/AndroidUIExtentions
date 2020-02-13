@@ -364,7 +364,7 @@ public class UCPaginatedList extends RelativeLayout {
         if (mData == null) {
             mData = new ArrayList<>();
         }
-        if (position > mData.size())
+        if (position > mData.size() || item == null)
             return;
         mData.add(position, item);
         mAdapter.notifyItemInserted(position);
