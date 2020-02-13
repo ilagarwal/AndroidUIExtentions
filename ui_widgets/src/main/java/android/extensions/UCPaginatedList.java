@@ -367,17 +367,29 @@ public class UCPaginatedList extends RelativeLayout {
         if (position > mData.size() || item == null)
             return;
         mData.add(position, item);
+        if (mAdapter == null) {
+            mAdapter = new UCPaginatedAdapter(mData, mAdapterDelegate);
+            mRecyclerView.setAdapter(mAdapter);
+        }
         mAdapter.notifyItemInserted(position);
+        mEmptyView.setVisibility(View.GONE);
     }
 
     public void insertItemRangeAtPosition(List<Object> items, int position) {
         if (mData == null) {
             mData = new ArrayList<>();
         }
-        if (position > mData.size() || items == null)
+        if (position > mData.size() || items == null || items.size() == 0)
             return;
         mData.addAll(position, items);
+        if (mAdapter == null) {
+            mAdapter = new UCPaginatedAdapter(mData, mAdapterDelegate);
+            mRecyclerView.setAdapter(mAdapter);
+        }
         mAdapter.notifyItemRangeInserted(position,items.size());
+        if (items.size() > 0) {
+            mEmptyView.setVisibility(View.GONE);
+        }
     }
 
     private void resetEmptyViewPageNumberState() {
