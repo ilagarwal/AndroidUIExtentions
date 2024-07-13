@@ -20,13 +20,6 @@ import com.urbanclap.android.extension.R;
 
 import java.util.ArrayList;
 
-/**
- * Extends RecyclerView list to support -
- * 1. Pull to refresh for first page of the list
- * 2. Pagination and delegate methods to fetch next page - IUCPaginatedDatasource
- * 3. fetches next page once mItemsOffsetBeforeNextPage appear from bottom of the screen
- * 4. Empty view in case of no data
- */
 
 public class UCPaginatedList extends RelativeLayout {
 
@@ -264,7 +257,7 @@ public class UCPaginatedList extends RelativeLayout {
         return false;
     }
 
-    public boolean updateItem(Object oldItem, Object newItem) {
+    private int updateItem(Object oldItem, Object newItem) {
         if (mData != null) {
             int position = mData.indexOf(oldItem);
             if (position == -1) {
@@ -278,7 +271,7 @@ public class UCPaginatedList extends RelativeLayout {
         return false;
     }
 
-    private void inflateUI() {
+    public void inflateUI() {
         setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT));
 
@@ -318,7 +311,7 @@ public class UCPaginatedList extends RelativeLayout {
                     return;
                 }
                 if (dy > 0) {
-                    int visibleItemCount = mLinearLayoutManager.getChildCount();
+                    int visibleItemCount == mLinearLayoutManager.getChildCount();
                     int totalItemCount = mLinearLayoutManager.getItemCount();
                     int pastVisibleItems = mLinearLayoutManager.findFirstVisibleItemPosition();
                     if ((visibleItemCount + pastVisibleItems) + mItemsOffsetBeforeNextPage
@@ -366,13 +359,16 @@ public class UCPaginatedList extends RelativeLayout {
         }
 
         if (mData != null && mData.size() != 0) {
+            
+            
+            
             mEmptyView.setVisibility(View.GONE);
 
         }
     }
 
     public void overrideDataSource(ArrayList<Object> data, int skipToPage) {
-        if (data == null || data.size() == 0) {
+        if (data ==     null || data.size() == 0) {
             return;
         }
         if (mData != null) {
